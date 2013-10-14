@@ -33,6 +33,17 @@ debug = function (log_txt) {
     }
 }
 
+evalHTML = function (html) {
+    html = html.replace(/<script[^>]*>(.*?)<\/script>/ig, function (scriptHtml, scriptCode) {
+        setTimeout(function() {
+            var scriptElement = document.createElement('script');
+            scriptElement.text = scriptCode;
+            document.head.appendChild(scriptElement);
+        }, 1);
+    });
+    return html;
+}
+
 var org;
 if (!org) {
     org = {};
@@ -149,9 +160,9 @@ org.apache.ode.DOMHelper = {};
         return strings.join("");
 
         function getStrings(n, strings){
-            if (n.nodeType == 3 /* Node.TEXT_NODE */)
+            if (n && n.nodeType == 3 /* Node.TEXT_NODE */)
                 strings.push(n.data);
-            else if (n.nodeType == 1 /* Node.ELEMENT_NODE */) {
+            else if (n && n.nodeType == 1 /* Node.ELEMENT_NODE */) {
                     for (var m = n.firstChild; m != null; m = m.nextSibling) {
                         getStrings(m, strings);
                     }
@@ -536,7 +547,7 @@ org.apache.ode.ProcessHandling = {};
         YAHOO.util.Dom.addClass(newDiv, 'myAccordion');
         var innerDiv = document.createElement('div');
         YAHOO.util.Dom.addClass(innerDiv, 'yui-cms-accordion multiple fade fixIE');
-        innerDiv.innerHTML = contentHTML;
+        innerDiv.innerHTML = evalHTML(contentHTML);
         newDiv.appendChild(innerDiv);
         if(content.firstChild){
             content.replaceChild(newDiv, content.firstChild);
@@ -982,7 +993,7 @@ org.apache.ode.InstanceHandling = {};
         YAHOO.util.Dom.addClass(newDiv, 'myAccordion');
         var innerDiv = document.createElement('div');
         YAHOO.util.Dom.addClass(innerDiv, 'yui-cms-accordion multiple fade fixIE');
-        innerDiv.innerHTML = contentHTML;
+        innerDiv.innerHTML = evalHTML(contentHTML);
         newDiv.appendChild(innerDiv);
         if(content.firstChild){
             content.replaceChild(newDiv, content.firstChild);
@@ -1295,7 +1306,7 @@ org.apache.ode.DeploymentHandling = {};
         YAHOO.util.Dom.addClass(newDiv, 'myAccordion');
         var innerDiv = document.createElement('div');
         YAHOO.util.Dom.addClass(innerDiv, 'yui-cms-accordion multiple fade fixIE');
-        innerDiv.innerHTML = contentHtml;
+        innerDiv.innerHTML = evalHTML(contentHtml);
         newDiv.appendChild(innerDiv);
         if(deployed.firstChild){
             deployed.replaceChild(newDiv, deployed.firstChild);
@@ -1415,4 +1426,3 @@ org.apache.ode.DeploymentHandling = {};
     ns.viewPackDetails = viewPackDetails;
     ns.populateDeployedPacks = populateDeployedPackages;
 })();
-
