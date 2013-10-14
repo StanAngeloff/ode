@@ -1250,10 +1250,10 @@ org.apache.ode.DeploymentHandling = {};
         var contentHtml = '';
         var deployedPacks = getDeployedPackages();
         for(var i = 0; i < deployedPacks.length; i++){
-            var packageundepId = deployedPacks[i].replace(/-/, "_")+"undeployid";
-            var packageundepVar = deployedPacks[i].replace(/-/,"_")+"undeployvar";
-            var packageDetailsId = deployedPacks[i].replace(/-/,"_")+"detid";
-            var packageDetailsVar = deployedPacks[i].replace(/-/,"_")+"detvar";
+            var packageundepId = deployedPacks[i].replace(/-/g, "_")+"undeployid";
+            var packageundepVar = "p"+deployedPacks[i].replace(/-/g,"_")+"undeployvar";
+            var packageDetailsId = deployedPacks[i].replace(/-/g,"_")+"detid";
+            var packageDetailsVar = "p"+deployedPacks[i].replace(/-/g,"_")+"detvar";
             contentHtml += '<div class="yui-cms-item yui-panel selected"><div class="hd">'+
                         deployedPacks[i] +
                         '</div><div class="bd"><div class="fixed">'+
